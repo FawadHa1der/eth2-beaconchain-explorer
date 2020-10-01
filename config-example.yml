@@ -1,10 +1,9 @@
 # Database credentials
 database:
-  user: "<dbuser>"
-  name: "<dbname>"
-  host: "<dbhost>"
-  port: "<dbport>"
-  password: "<dbpassword>"
+  user: fawad
+  name: mycooldb
+  host: localhost
+  port: 5432
 
 # Chain network configuration (example will work for the prysm testnet)
 chain:
@@ -23,11 +22,10 @@ frontend:
     host: "localhost" # Address to listen on
     port: "3333" # Port to listen on
   database:
-    user: "<dbuser>"
-    name: "<dbname>"
-    host: "<dbhost>"
-    port: "<dbport>"
-    password: "<dbpassword>"
+    user: fawad
+    name: mycooldb
+    host: localhost
+    port: 5432
   sessionSecret: "<sessionSecret>"
   email:
     smtp:
@@ -47,6 +45,6 @@ indexer:
     port: "4000" # port of the backend node
     type: "prysm" # can be either prysm or lighthouse
     pageSize: 500 # the amount of entries to fetch per paged rpc call
-  eth1Endpoint: 'https://goerli.infura.io/v3/<api-token>'
+  eth1Endpoint: 'http://localhost:8545'
   eth1DepositContractAddress: '0x5cA1e00004366Ac85f492887AAab12d0e6418876'
   eth1DepositContractFirstBlock: 2523557
