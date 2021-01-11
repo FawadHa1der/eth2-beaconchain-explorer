@@ -1,5 +1,10 @@
 {{ define "js"}}
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/keen-slider@5.0.2/keen-slider.min.css"
+/>
 <script src="//d3js.org/d3.v4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/keen-slider@5.0.2/keen-slider.min.js"></script>
 
 <script type="text/javascript">
   // Chart code from https://github.com/holiman/fork.ethstats.net with approval by the author
@@ -18,6 +23,7 @@
     var subgraphMap = {}
     var totalNodes = 0
     var nextSubgraph = 0
+    debugger
 
     for (var i = 0; i < nodes.length; i++) {
       if (subgraphMap[nodes[i].block.hash] == undefined) {
@@ -51,7 +57,7 @@
       node.y = (latest - node.block.timestamp) * pixelsPerSecond
       for (var j = 0; j < columns.length; j++) {
         if (j == 0 && !node.canonical) continue
-        if (columns[j] < node.y) continue
+        if (columns[j] < node.y) continue 
         if (
           node.siblings
             .map(function(n) {

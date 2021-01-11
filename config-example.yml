@@ -38,13 +38,13 @@ frontend:
 # Indexer config
 indexer:
   enabled: true # Enable or disable the indexing service
-  fullIndexOnStartup: false # Perform a one time full db index on startup
-  indexMissingEpochsOnStartup: false # Check for missing epochs and export them after startup
+  fullIndexOnStartup: true # Perform a one time full db index on startup
+  indexMissingEpochsOnStartup: true # Check for missing epochs and export them after startup
   node:
     host: "localhost" # Address of the backend node
     port: "4000" # port of the backend node
     type: "prysm" # can be either prysm or lighthouse
-    pageSize: 500 # the amount of entries to fetch per paged rpc call
-  eth1Endpoint: 'http://localhost:8545'
+    pageSize: 250 # the amount of entries to fetch per paged rpc call
+  eth1Endpoint: 'https://goerli.infura.io/v3/ed490ec802bd43c9b2758f4db528897a'
   eth1DepositContractAddress: '0x5cA1e00004366Ac85f492887AAab12d0e6418876'
   eth1DepositContractFirstBlock: 2523557

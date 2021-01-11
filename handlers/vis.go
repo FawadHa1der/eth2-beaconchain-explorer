@@ -68,7 +68,7 @@ func VisBlocks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sinceSlot := utils.TimeToSlot(uint64(since - 120))
-
+	sinceSlot = 10
 	var chartData []*types.VisChartData
 
 	err = db.DB.Select(&chartData, "select slot, blockroot, parentroot, proposer from blocks where slot >= $1 and status in ('1', '2') order by slot desc limit 50;", sinceSlot)

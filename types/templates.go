@@ -197,7 +197,7 @@ type ValidatorPageData struct {
 	ProposedBlocksCount                 uint64
 	AttestationsCount                   uint64
 	StatusProposedCount                 uint64
-	StatusMissedCount                   uint64
+	StatusMissedCount               	    uint64
 	DepositsCount                       uint64
 	SlashingsCount                      uint64
 	Income1d                            int64
