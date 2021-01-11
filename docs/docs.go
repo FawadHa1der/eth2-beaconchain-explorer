@@ -19,7 +19,6 @@ var doc = `{
         "description": "{{.Description}}",
         "title": "{{.Title}}",
         "contact": {},
-        "license": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -333,6 +332,378 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/user/dashboard/save": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register or update your mobile notification token",
+                "parameters": [
+                    {
+                        "description": "Your device` + "`" + `s firebase notification token",
+                        "name": "token",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/mobile/settings": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get your device settings, currently only whether to enable mobile notifcations or not",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.ApiResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.MobileSettingsData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Changing your devices mobile settings",
+                "parameters": [
+                    {
+                        "description": "Whether to enable mobile notifications for this device or not",
+                        "name": "notify_enabled",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.ApiResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.MobileSettingsData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/token": {
+            "post": {
+                "security": [
+                    {
+                        "OAuthAccessCode": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Exchange your oauth code for an access token or refresh your access token",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "grant_type use authorization_code for oauth code or refresh_token if you wish to refresh an token",
+                        "name": "grant_type",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Only required when using authorization_code grant type. Code received via oauth redirect_uri",
+                        "name": "code",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Only required when using authorization_code grant type. Must match the redirect_uri from your oauth flow.",
+                        "name": "redirect_uri",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Only required when using refresh_token grant type. The refresh_token you received during authorization_code flow.",
+                        "name": "refresh_token",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.OAuthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.OAuthErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.OAuthErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/validator/saved": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all your tagged validators",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/types.ApiResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/types.MinimalTaggedValidators"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/validator/{pubkey}/add": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "subscribes a user to get notifications from a specific validator",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Public Key of validator you want to subscribe to",
+                        "name": "pubKey",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Submit \\",
+                        "name": "balance_decreases",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Submit \\",
+                        "name": "validator_slashed",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/validator/{pubkey}/remove": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "unsubscribes a user from a specific validator",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Public Key of validator you want to subscribe to",
+                        "name": "pubKey",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/validator/eth1/{address}": {
             "get": {
                 "produces": [
@@ -380,7 +751,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/validator/{index}": {
+        "/api/v1/validator/{indexOrPubkey}": {
             "get": {
                 "produces": [
                     "application/json"
@@ -392,8 +763,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Up to 100 validator indices, comma separated",
-                        "name": "index",
+                        "description": "Up to 100 validator indicesOrPubkeys, comma separated",
+                        "name": "indexOrPubkey",
                         "in": "path",
                         "required": true
                     }
@@ -408,7 +779,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/validator/{index}/attestations": {
+        "/api/v1/validator/{indexOrPubkey}/attestations": {
             "get": {
                 "produces": [
                     "application/json"
@@ -420,8 +791,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Up to 100 validator indices, comma separated",
-                        "name": "index",
+                        "description": "Up to 100 validator indicesOrPubkeys, comma separated",
+                        "name": "indexOrPubkey",
                         "in": "path",
                         "required": true
                     }
@@ -436,7 +807,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/validator/{index}/balancehistory": {
+        "/api/v1/validator/{indexOrPubkey}/balancehistory": {
             "get": {
                 "produces": [
                     "application/json"
@@ -448,8 +819,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Up to 100 validator indices, comma separated",
-                        "name": "index",
+                        "description": "Up to 100 validator indicesOrPubkeys, comma separated",
+                        "name": "indexOrPubkey",
                         "in": "path",
                         "required": true
                     }
@@ -464,7 +835,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/validator/{index}/deposits": {
+        "/api/v1/validator/{indexOrPubkey}/deposits": {
             "get": {
                 "produces": [
                     "application/json"
@@ -476,8 +847,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Up to 100 validator indices, comma separated",
-                        "name": "index",
+                        "description": "Up to 100 validator indicesOrPubkeys, comma separated",
+                        "name": "indexOrPubkey",
                         "in": "path",
                         "required": true
                     }
@@ -492,7 +863,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/validator/{index}/performance": {
+        "/api/v1/validator/{indexOrPubkey}/performance": {
             "get": {
                 "produces": [
                     "application/json"
@@ -504,8 +875,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Up to 100 validator indices, comma separated",
-                        "name": "index",
+                        "description": "Up to 100 validator indicesOrPubkeys, comma separated",
+                        "name": "indexOrPubkey",
                         "in": "path",
                         "required": true
                     }
@@ -520,7 +891,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/validator/{index}/proposals": {
+        "/api/v1/validator/{indexOrPubkey}/proposals": {
             "get": {
                 "produces": [
                     "application/json"
@@ -532,8 +903,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Up to 100 validator indices, comma separated",
-                        "name": "index",
+                        "description": "Up to 100 validator indicesOrPubkeys, comma separated",
+                        "name": "indexOrPubkey",
                         "in": "path",
                         "required": true
                     }
@@ -547,6 +918,79 @@ var doc = `{
                     }
                 }
             }
+        }
+    },
+    "definitions": {
+        "types.ApiResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MinimalTaggedValidators": {
+            "type": "object",
+            "properties": {
+                "index": {
+                    "type": "integer"
+                },
+                "pubKey": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MobileSettingsData": {
+            "type": "object",
+            "properties": {
+                "notify_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.OAuthErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "error_description": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.OAuthResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "integer"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "token_type": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "OAuthAccessCode": {
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://beaconcha.in/user/authorize",
+            "tokenUrl": "https://beaconcha.in/user/token"
         }
     }
 }`
@@ -567,7 +1011,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "",
 	Schemes:     []string{},
 	Title:       "Beaconcha.in ETH2 API",
-	Description: "High performance API for querying information from the Ethereum 2.0 beacon chain\nThe API is currently free to use. A fair use policy applies. Calls are rate limited to\n10 requests / 1 minute / IP. All API results are cached for 1 minute.\nIf you required a higher usage plan please get in touch with us at support@beaconcha.in.",
+	Description: "High performance API for querying information from the Ethereum 2.0 beacon chain\nThe API is currently free to use. A fair use policy applies. Calls are rate limited to\n10 requests / 1 minute / IP. All API results are cached for 1 minute.\nIf you required a higher usage plan please checkout https://beaconcha.in/pricing.",
 }
 
 type s struct{}
